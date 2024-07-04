@@ -2,32 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  html {
+  --color-primary: #4f46e5;
+  --color-secondary: #34a853;
+  --color-buttons: #fbbc05;
+  --color-typography: #ea4335;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+
+.OtpInputStyle{
+  width: 25% !important;
+  height: 3rem;
+  margin: 0 1rem;
+  font-size: 2rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.OtpInputStyle:focus{
+  border: 2px solid var(--color-primary);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.OtpInputStyle::-webkit-outer-spin-button,
+.OtpInputStyle::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.OtpInputStyle[type=number] {
+  -moz-appearance: textfield;
 }
