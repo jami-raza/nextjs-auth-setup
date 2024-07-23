@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const email = process.env.NEXT_PUBLIC_MAIL_EMAIL;
+const adminEmail = process.env.NEXT_PUBLIC_MAIL_EMAIL;
 const host = process.env.NEXT_PUBLIC_MAIL_HOST ;
 const port = process.env.NEXT_PUBLIC_MAIL_PORT;
 const password = process.env.NEXT_PUBLIC_MAIL_PASSWORD;
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
   // },
 
   auth: {
-    user: email,
+    user: adminEmail,
     pass: password,
   },
 });
@@ -33,7 +33,7 @@ export async function sendEmail({
 }) {
   
   transporter.sendMail({
-    from: email,
+    from: adminEmail,
     to: email,
     replyTo: email,
     subject: `Website activity from ${email}`,

@@ -50,3 +50,4 @@ export const resetPasswordValidator = z.object({
 
 export type FormSchemaSignInType = z.input<typeof signInValidator>;
 export type FormSchemaForgotPasswordType = z.input<typeof forgetPasswordValidator>;
+export type FormSchemaResetPasswordType = z.input<typeof resetPasswordValidator>;

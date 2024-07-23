@@ -2,7 +2,7 @@
 import PrimaryButton from '@/app/components/buttons/PrimaryButton'
 import Input from '@/app/components/inputs/input'
 import { FormSchemaForgotPasswordType, FormSchemaSignInType, signInValidator } from '@/app/lib/validators/auth'
-import { forgotPassword, login } from '@/app/services/auth'
+import { forgotPassword, login, verifyOTP } from '@/app/services/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -11,12 +11,16 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import OtpInput from 'react-otp-input';
 import { useSearchParams } from 'next/navigation'
 import TextButton from '@/app/components/buttons/TextButton'
+import axios from 'axios'
+import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 
 const VerifyOTP = () => {
 
     const [otp, setOtp] = useState('');
     const [seconds, setSeconds] = useState(60);
     const [disableResendOTP, setDisableResendOTP] = useState(true);
+    const [resending, setResending] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter()
     const searchParams = useSearchParams()
     const email = searchParams.get('email')
@@ -29,33 +33,75 @@ const VerifyOTP = () => {
     }, [searchParams])
 
     useEffect(() => {
-        const timerId = setInterval(() => {
-            setSeconds(prevSeconds => {
-                const newSeconds = prevSeconds - 1;
-                // if (customLogic) {
-                //   customLogic(newSeconds);
-                // }
-                if (newSeconds <= 0) { // Example logic: when timer reaches 60 seconds
-                    clearInterval(timerId);
-                    setDisableResendOTP(false)
-                    console.log("Timer reaches 60 seconds")
-                    //   if (onTimeUp) {
-                    //     onTimeUp();
-                    //   }
-                }
-                return newSeconds;
-            });
-        }, 1000);
+        if (disableResendOTP) {
 
-        return () => clearInterval(timerId);
-    }, []);
+            const timerId = setInterval(() => {
+                setSeconds(prevSeconds => {
+                    const newSeconds = prevSeconds - 1;
+                    // if (customLogic) {
+                    //   customLogic(newSeconds);
+                    // }
+                    if (newSeconds <= 0) { // Example logic: when timer reaches 60 seconds
+                        clearInterval(timerId);
+                        setDisableResendOTP(false)
+                        console.log("Timer reaches 60 seconds")
+                        //   if (onTimeUp) {
+                        //     onTimeUp();
+                        //   }
+                    }
+                    return newSeconds;
+                });
+            }, 1000);
 
-    const handleSubmit = () => {
+            return () => clearInterval(timerId);
+        }
+    }, [disableResendOTP]);
 
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitting(true)
+        try {
+            const res = await verifyOTP({ email: email as string, otp: otp, type: type as string });
+            console.log(res, "Response")
+            router.push('/new-password')
+            setIsSubmitting(false)
+
+            // router.push(`/verify-otp?email=${data.email}&type=ForgotPassword`)
+            // const setCookieHeader = res.headers['set-cookie'];
+
+            // // You can now store the cookie or use it for subsequent requests
+            // console.log('Cookie received:', setCookieHeader);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                // do whatever you want with native error
+                enqueueSnackbar({ message: error?.response?.data?.error, variant: 'error',anchorOrigin:{horizontal:"center", vertical:"bottom"} })
+            }
+            setIsSubmitting(false)
+            console.log(error, "Error in on submit")
+        }
+    }
+    const handleResendOTP = async () => {
+        try {
+            setResending(true)
+            const res = await forgotPassword({ email: email as string })
+            console.log(res, "Response")
+            setDisableResendOTP(true)
+            setSeconds(60)
+            setResending(false)
+            // router.push(`/verify-otp?email=${data.email}&type=ForgotPassword`)
+            // const setCookieHeader = res.headers['set-cookie'];
+
+            // // You can now store the cookie or use it for subsequent requests
+            // console.log('Cookie received:', setCookieHeader);
+        } catch (error) {
+            console.log(error, "Error in on submit")
+        }
     }
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <SnackbarProvider />
+
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-10 w-auto"
@@ -84,13 +130,13 @@ const VerifyOTP = () => {
                         />
                     </div>
 
-                    <div>
-                        <h1>Timer: {seconds} seconds</h1>
-                        <TextButton type='button' label='Resend' disabled={disableResendOTP} />
+                    <div className='flex justify-between items-center mr-4 ml-4'>
+                        <p className='text-sm'>{seconds} seconds</p>
+                        <TextButton type='button' label={resending ? 'Resending...' : 'Resend'} disabled={disableResendOTP || resending} onClick={handleResendOTP} />
                     </div>
 
                     <div>
-                        <PrimaryButton type='submit' disabled={otp.length < 4} label={'Verify'} />
+                        <PrimaryButton type='submit' disabled={otp.length < 4 || isSubmitting} label={isSubmitting ? 'Verifying' : 'Verify'} />
                     </div>
                 </form>
 

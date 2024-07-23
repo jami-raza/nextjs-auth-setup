@@ -11,7 +11,7 @@ const TextButton = ({ label, type, ...props }: ITextButtonProps) => {
             <button
                 {...props}
                 type={type}
-                className="bg-transparent px-3 py-1.5 text-sm font-semibold leading-6 text-primary disabled:text-gray-500"
+                className="bg-transparent text-sm font-semibold leading-6 text-primary disabled:text-gray-500"
             >
                 {label}
             </button>
