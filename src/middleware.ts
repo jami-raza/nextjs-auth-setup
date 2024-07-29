@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJWT } from "./app/lib/jwt/verifyToken";
+import { verifyJWT } from "@/lib/jwt/verifyToken";
 import * as jose from "jose";
-import { generateError } from "./app/lib/Responses/generateError";
+import { generateError } from "@/lib/Responses/generateError";
 import {
   generateAuthToken,
   generateRefreshToken,
-} from "./app/lib/jwt/generateToken";
+} from "@/lib/jwt/generateToken";
 
 
 

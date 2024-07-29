@@ -1,13 +1,13 @@
-import { generateError } from "@/app/lib/Responses/generateError";
-import { generateHash } from "@/app/lib/hash/generateHash";
+import { generateError } from "@/lib/Responses/generateError";
+import { generateHash } from "@/lib/hash/generateHash";
 import {
   generateAuthToken,
   generateRefreshToken,
-} from "@/app/lib/jwt/generateToken";
+} from "@/lib/jwt/generateToken";
 import {
   resetPasswordValidator,
-} from "@/app/lib/validators/auth";
-import { prisma } from "@/app/db/prismaClient";
+} from "@/lib/validators/auth";
+import { prisma } from "@/db/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 
 type IReqUser = {

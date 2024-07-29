@@ -1,8 +1,8 @@
-import { generateError } from "@/app/lib/Responses/generateError";
-import { generateAuthToken, generateRefreshToken } from "@/app/lib/jwt/generateToken";
-import { signInValidator } from "@/app/lib/validators/auth";
-import { compareHash } from "@/app/lib/hash/compareHash";
-import { prisma } from "@/app/db/prismaClient";
+import { generateError } from "@/lib/Responses/generateError";
+import { generateAuthToken, generateRefreshToken } from "@/lib/jwt/generateToken";
+import { signInValidator } from "@/lib/validators/auth";
+import { compareHash } from "@/lib/hash/compareHash";
+import { prisma } from "@/db/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

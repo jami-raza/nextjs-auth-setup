@@ -2,8 +2,8 @@ import NextAuth, { AuthError } from "next-auth";
 import "next-auth/jwt";
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
-import { prisma } from "./app/db/prismaClient";
-import { userGoogleLogin } from "./app/actions";
+import { prisma } from "@/db/prismaClient";
+import { userGoogleLogin } from "@/actions";
 
 const config = {
   theme: { logo: "https://authjs.dev/img/logo-sm.png" },

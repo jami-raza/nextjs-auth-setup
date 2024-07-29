@@ -1,12 +1,14 @@
 'use client'
-import { userLogout } from '@/app/actions'
-import PrimaryButton from '@/app/components/buttons/PrimaryButton'
-import Input from '@/app/components/inputs/input'
-import { FormSchemaResetPasswordType, resetPasswordValidator } from '@/app/lib/validators/auth'
-import { login, resetPassword } from '@/app/services/auth'
+import { userLogout } from '@/actions'
+import PrimaryButton from '@/components/buttons/PrimaryButton'
+import Input from '@/components/inputs/input'
+import { FormSchemaResetPasswordType, resetPasswordValidator } from '@/lib/validators/auth'
+import { login, resetPassword } from '@/services/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import React from 'react'
 import { useFormState } from 'react-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -40,11 +42,16 @@ const NewPassword = () => {
             // console.log('Cookie received:', setCookieHeader);
         } catch (error) {
             console.log(error, "Error in on submit")
+            if (axios.isAxiosError(error)) {
+                // do whatever you want with native error
+                enqueueSnackbar({ message: error?.response?.data?.error, variant: 'error',anchorOrigin:{horizontal:"center", vertical:"bottom"} })
+            }
         }
         // await fetch('/api/v1/form', { body: formData, method: 'POST' });
     };
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <SnackbarProvider />
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-10 w-auto"

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { axiosServerInstance } from "./axiosSerInstance";
 import { axiosClientInstance } from "./axiosClientInstance";
+import { FormSchemaSignUpType } from "../lib/validators/auth";
 
 export async function login({
   email,
@@ -12,6 +13,21 @@ export async function login({
   const response = await axios.post(
     `/api/auth/local/signin`,
     { email, password },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response;
+}
+export async function signUp({
+  email,
+  password,
+  fullName
+}: FormSchemaSignUpType) {
+  const response = await axios.post(
+    `/api/auth/local/signup`,
+    { email, password, fullName },
     {
       withCredentials: true,
     }

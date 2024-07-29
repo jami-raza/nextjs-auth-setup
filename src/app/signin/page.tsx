@@ -1,6 +1,6 @@
 import React from 'react'
 import SignIn from '../interfaces/forms/signIn'
-import { getAuthToken } from '../actions'
+import { getAuthToken } from '@/actions'
 import { redirect } from 'next/navigation'
 
 const Page = async () => {

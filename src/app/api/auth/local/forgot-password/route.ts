@@ -1,9 +1,9 @@
-import { generateError } from "@/app/lib/Responses/generateError";
-import { forgetPasswordValidator } from "@/app/lib/validators/auth";
-import { prisma } from "@/app/db/prismaClient";
+import { generateError } from "@/lib/Responses/generateError";
+import { forgetPasswordValidator } from "@/lib/validators/auth";
+import { prisma } from "@/db/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
-import { sendEmail } from "@/app/lib/email/sendmail";
-import { generateOTP } from "@/app/lib/common/otpGenerator";
+import { sendEmail } from "@/lib/email/sendmail";
+import { generateOTP } from "@/lib/common/otpGenerator";
 
 export async function POST(request: NextRequest) {
   try {

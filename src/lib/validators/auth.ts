@@ -10,7 +10,7 @@ export const signInValidator = z.object({
 });
 
 export const signUpValidator = z.object({
-  fullName: z.string({ message: "Full Name is Required" }),
+  fullName: z.string({ message: "Full Name is Required" }).min(3, "Please enter your name"),
   email: z
     .string({ message: "Email is Required" })
     .email({ message: "Email is Invalid" }),
@@ -48,6 +48,7 @@ export const resetPasswordValidator = z.object({
   }
 })
 
+export type FormSchemaSignUpType = z.input<typeof signUpValidator>;
 export type FormSchemaSignInType = z.input<typeof signInValidator>;
 export type FormSchemaForgotPasswordType = z.input<typeof forgetPasswordValidator>;
 export type FormSchemaResetPasswordType = z.input<typeof resetPasswordValidator>;

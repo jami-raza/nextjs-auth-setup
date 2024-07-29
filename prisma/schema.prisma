@@ -13,6 +13,7 @@ enum UserProvider {
   GOOGLE
   LOCAL
 }
+
 enum OtpType {
   ForgotPassword
   Register
@@ -37,7 +38,7 @@ model User {
   role      UserRoleType @default(USER)
   provider  UserProvider @default(LOCAL)
   accounts  Account[]
-  otps  Otp[]
+  otps      Otp[]
 }
 
 model Otp {
@@ -47,14 +48,17 @@ model Otp {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   otp       String
-  type      OtpType @default(ForgotPassword)
-  expiresAt DateTime 
+  type      OtpType  @default(ForgotPassword)
+  expiresAt DateTime
 }
 
 model Account {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  userId    String
-  user      User     @relation(fields: [id], references: [id])
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+  accountName    String
+  accountType    String
+  accountBalance Float
+  userId         String
+  user           User     @relation(fields: [id], references: [id])
 }

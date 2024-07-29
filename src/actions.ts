@@ -1,11 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { prisma } from "./db/prismaClient";
+import { prisma } from "@/db/prismaClient";
+import { signIn, signOut } from "@/auth";
 import {
   generateAuthToken,
   generateRefreshToken,
-} from "./lib/jwt/generateToken";
+} from "@/lib/jwt/generateToken";
 
 export async function getAuthToken() {
   const authToken = cookies().get("authToken");
@@ -37,9 +38,12 @@ export async function getHeadersAuthToken() {
   //   })
 }
 export async function userLogout() {
-  cookies().delete('authToken')
-  cookies().delete('refreshToken')
-  
+  cookies().delete("authToken");
+  cookies().delete("refreshToken");
+}
+
+export async function googleLogin() {
+  await signIn("google");
 }
 
 export async function userGoogleLogin({
@@ -63,6 +67,7 @@ export async function userGoogleLogin({
         email: email,
         name: name,
         password: "",
+        provider:'GOOGLE'
       },
     });
   }
@@ -75,8 +80,8 @@ export async function userGoogleLogin({
     id: user.id,
   });
 
-  console.log(authToken, "AUTH TOKEN ============>")
-  console.log(refreshToken, "REFRESH TOKEN ============>")
+  console.log(authToken, "AUTH TOKEN ============>");
+  console.log(refreshToken, "REFRESH TOKEN ============>");
 
   cookies().set("authToken", authToken, {
     httpOnly: true,
